@@ -22,6 +22,8 @@ look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.h
 - find a point in intersection furthest in x direction
 - intersection of "diamonds" l1-ball?
 - ooh: list of norm balls: center, norm, raidus. find intersection
+- polytopes: (need to introduce convex hull of points) given vertices of 2 convex polyhedra, determine if they intersect.
+- hyperplane version of polytope?
 
 ## diet problem
 - list of foods with nutrients
