@@ -1,0 +1,89 @@
+% Fonts.
+%\usefonttheme{default}
+\usefonttheme[onlymath]{serif}
+%\usepackage{pxfonts}
+%\usepackage{eulervm}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+% Template changes.
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left= 0.9cm, text margin right=1cm}
+
+\setbeamertemplate{frametitle} {
+  \vskip 0.6cm
+  \hskip -0.6cm
+  \insertframetitle
+}
+
+\setlength{\parskip}{4pt}
+
+\let\oldsection\section
+  \renewcommand{\section}[1]{\oldsection{#1}
+  \begin{frame}
+      \frametitle{Outline}
+      \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\newcommand\footlineon{
+  \setbeamertemplate{footline} {
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,leftskip=.6cm,rightskip=.6cm]{structure}
+      \footnotesize \insertsection
+      \hfill
+      {\insertframenumber}
+    \end{beamercolorbox}
+    \vskip 0.45cm
+  }
+}
+\footlineon
+
+\newcommand{\parttitle}[2]{Part {#1}:~~\textbf{#2}}
+
+% New environments.
+\newenvironment{body_itemize}{
+  \setlength{\leftmargini}{0.5cm}
+  \begin{itemize}
+  \setlength{\itemsep}{6pt}
+  \vskip 6pt
+}{
+  \end{itemize}
+}
+
+\newenvironment{body_enumerate}{
+  \setlength{\leftmargini}{0cm}
+  \begin{enumerate}
+  \setlength{\itemsep}{6pt}
+}{
+  \end{enumerate}
+}
+
+% Note: cannot mention begin/end within frames. So use command.
+% Compensating for limitation of beamer.
+\newenvironment{itemized}[1]{
+  \begin{frame}{#1}
+  \startbodyitemize
+}{
+  \stopbodyitemize
+  \end{frame}
+}
+
+\newcommand{\startbodyenumerate}{\begin{body_enumerate}}
+\newcommand{\stopbodyenumerate}{\end{body_enumerate}}
+\newenvironment{enumerated}[1]{
+  \begin{frame}
+  \frametitle{#1}
+  \startbodyenumerate
+}{
+  \stopbodyenumerate
+  \end{frame}
+}
+
+\newcommand{\multilineL}[1]{
+  \renewcommand*{\arraystretch}{1.3}
+  \begin{tabular}[b]{@{}l@{}}
+    #1
+    \\[1.5ex]\\
+  \end{tabular}
+}
+
