@@ -1,0 +1,2 @@
+- work out the solution to 1-d linear regression by hand
+- Show that 1-d linear least squares problem is convex
