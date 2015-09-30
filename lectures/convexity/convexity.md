@@ -178,10 +178,20 @@ b_m^T
 $$
 - $Ax \leq b$ is **componentwise** or **vector inequality**
 
+## Convex Hull
+- the **convex hull** of points $x_1, \ldots, x_n \in \reals^n$ is
+$$C = \lbrace t_1 x_1 + \cdots + t_n x_n \mid t_i \geq 0, t_1 + \cdots + t_n = 1 \rbrace$$
+- i.e., any weighted average of the points
+- alternative description of polyhedron
+$$
+\includegraphics[width=0.35\textwidth]{fig/hull.pdf}
+$$
 
 ## More Examples
 - solutions to a linear equation $Ax = b$ forms a convex set (intersection of hyperplanes)
 - probability simplex, $C = \lbrace x \vert x \geq 0, 1^Tx = 1\rbrace$ is convex (intersection of positive orthant and hyperplane)
+    - also convex hull of standard basis vectors
+    - $(1,0,0), (0,1,0), (0,0,1) \in \reals^3$
 
 ## CVXPY for Convex Intersection
 - use CVXPY to solve the **convex set intersection problem**
