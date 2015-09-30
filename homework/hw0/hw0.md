@@ -42,5 +42,14 @@ I find it useful both for experimenting with code, and for explaining concepts. 
 - If you got pretty plots and no error messages, then everything works! If you have any trouble, please ask on Piazza, in class, or in office hours.
 
 # Part 2: Homework Submission
+I'll use this initial and **ungraded** homework as a trial run to see how well homework submission and autograding will work.
 
-Follow this Dropbox File request link: <https://www.dropbox.com/request/KoUUxj6Oy9j2gNh98hZ8>
+- Please download `hw0.py` and `grade_hw0.py` from the Homework page of the course website and place them in the same directory.
+- From that directory run `python grade_hw0.py` and notice that you currently have 0 out of a possible 2 points.
+- Modify `hw0.py` according to the instructions in the file so that you pass
+the tests to get the full 2 points.
+- Once you're happy with your `hw0.py`, please submit it to this Dropbox File request link: <https://www.dropbox.com/request/KoUUxj6Oy9j2gNh98hZ8>.
+- Please keep the filename the same, `hw0.py`, but do make sure your name
+and Stanford email are listed properly in `hw0.py`.
+- I'm planning on providing a `grade_hwX.py` file for each homework as a **sanity check**. Getting full credit with the grading file on your local machine
+doesn't guarantee that I'll grant full credit when I grade it. I'll likely use a slightly different grading script, and may look at the source code individually to determine a grade. 
