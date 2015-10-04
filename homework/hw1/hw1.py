@@ -2,6 +2,16 @@ from __future__ import print_function
 import cvxpy as cvx
 import numpy as np
 
+"""
+Please fill in your name and email address in the variables below.
+
+Please complete prob1, prob2, and prob3 according to the description in hw1.pdf.
+"""
+
+# modify these variables
+name = YOUR NAME
+stanford_email = yourname@stanford.edu
+
 def prob1(A, b):
     m,n = A.shape
 
