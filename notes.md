@@ -15,7 +15,12 @@ https://github.com/sebastianbarfort/numedig/blob/master/2-workflow/slides/slides
 look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.html>
 
 # todo
-- namedrop specific models: SVM, logistic, fitting, smoothing
+- maybe open class with regression to see CVXPY examples
+    - students won't know convexity at this point
+    - but this gives us more examples to work with when
+      explaining convex functions, sets, problems in lecture 2
+- with regression, can explain multiobjective problems
+- give examples with convex problem transformations
 
 # homework
 - given list of spheres (point in R^n and radius), find a point in the intersection
