@@ -18,7 +18,7 @@ Submit your completed `hw1.py` to this Dropbox File Request link: <https://www.d
 # Problem 1: Feasibility with CVXPY
 
 Given a matrix $A \in \mathbf{R}^{m \times n}$ and vector $b \in \mathbf{R}^m$,
-determine if there is an $x \in \mathbf{R}^n$ such that $Ax \leq b$ and $x \geq
+determine if there is an $x \in \mathbf{R}^n$ such that $Ax = b$ and $x \geq
 0$. If such an $x$ exists, return an example as a NumPy `array`. If no such $x$ exists, return the
 Python value `None`. Fill in `prob1(A, b)` in `hw1.py`.
 
