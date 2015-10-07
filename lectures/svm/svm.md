@@ -41,8 +41,8 @@ a^Tx_i - b \geq +1 \mbox{ if } y_i = +1\\
 a^Tx_i - b \leq -1 \mbox{ if } y_i = -1
 \end{align*}
 
-## more problem
-- for all $i$, rewrite as
+## Linearly Separable Problem
+- for all $i$, rewrite constraints as
 $$
 y_i\left(a^Tx_i - b\right) \geq 1
 $$
@@ -54,8 +54,23 @@ $$
 \end{array}
 $$
 with variables $a \in \reals^n$, $b \in \reals$
+- has many potential separators
 
+## Which Separator?
+\centering
+\includegraphics[width=0.65\textwidth]{fig/which1.pdf}
 
+## Which Separator?
+\centering
+\includegraphics[width=0.65\textwidth]{fig/which2.pdf}
+
+## Which Separator?
+\centering
+\includegraphics[width=0.65\textwidth]{fig/which3.pdf}
+
+## Which Separator?
+\centering
+\includegraphics[width=0.65\textwidth]{fig/which4.pdf}
 
 
 ## Separable linear classification/discrimination
