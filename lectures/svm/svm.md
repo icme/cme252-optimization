@@ -4,14 +4,22 @@
 
 # Intro
 ## Support Vector Machines
-- find a hyperplane to separate data points into two classes
-- use hyperplane to classify new (unseen) points
+- many related/overlapping names:
+    - maximum margin classifier
+    - support vector classifier
+    - (robust) linear discrimination/classification 
+    - support vector machine
+- I won't always use the right name
+- we'll start with:
+    - find a hyperplane to separate data points into two classes
+    - use hyperplane to classify new (unseen) points
 
+## Support Vector Machines
 \centering
-\includegraphics[width=0.6\textwidth]{fig/first.pdf}
+\includegraphics[width=0.7\textwidth]{fig/first.pdf}
 
 ## Scenarios
-- assume data falls into one of these categories:
+- classify data in increasingly sophisticated scenarios:
     + strictly linearly separable
     + approximately (not strictly) linearly separable
     + approximately non-linearly separable (hyperplanes won't work)
@@ -28,6 +36,7 @@
 \centering
 \includegraphics[width=0.65\textwidth]{fig/non_lin_sep.pdf}
 
+# Linearly Separable Problem
 ## Linearly Separable Problem
 - data: $x_i \in \reals^n$ with labels $y_i \in \lbrace +1, -1 \rbrace$ for $i = 1, \ldots, N$
 - assume **strictly** linearly separable
@@ -143,7 +152,8 @@ Problem(obj, constr).solve()
 \centering
 \includegraphics[width=0.65\textwidth]{fig/max_margin.pdf}
 
-## Nonseparable linear classification
+# Non-separable Linear Classification
+## Non-separable Linear Classification
 - relaxed feasibility problem
 - l1 penality to minimize misclassificaiton: pure LP
 - tradeoff between classification and width of slab: SOCP
