@@ -110,7 +110,7 @@ $$
 \includegraphics[width=0.45\textwidth]{fig/slab.pdf}
 
 ## Maximum Margin Classifier
-- width of separating slab
+- **margin**, or width of separating slab
 $$
 \lbrace x \mid -1 \leq a^T x - b \leq +1 \rbrace
 $$
@@ -136,7 +136,7 @@ $$
 \mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, N,
 \end{array}
 $$
-the **maximum margin classifier** problem
+the **maximum margin classifier** (MMC) problem
 
 ## Maximum Margin Classifier in CVXPY
 ```python
@@ -154,15 +154,6 @@ Problem(obj, constr).solve()
 
 # Non-separable Linear Classification
 ## Non-separable Linear Classification
-- reformulate as hinge loss function
-- show indicator function to show same as feasibility problem
-- logistic loss is logistic regression
-- other random loss functions
-
-"violation of margins/constraints"
-- combine relaxation with width of slab for "support vector classifier"
-
-## Non-separable Linear Classification
 \centering
 \includegraphics[width=0.65\textwidth]{fig/non_separable.pdf}
 
@@ -177,7 +168,8 @@ prob.solve()
 ```
 - results in `prob.status == 'infeasible'`
 
-## Non-separable Linear Classification
+# Sparse Violation Classifier
+## Sparse Violation Classifier
 - idea: "relax" constraints to make problem feasible
 - add **slack** variables $u \in \reals^N_+$ to allow data points to be
 on "wrong side" of hyperplane
@@ -189,7 +181,7 @@ $$
     $\lbrace x \mid -1 \leq a^T x - b \leq +1 \rbrace$
     + $u_i > 1$: $x_i$ on **wrong** side of hyperplane
 
-## Non-separable Linear Classification
+## Sparse Violation Classifier
 - $u$ gives measure of how much constraints are violated
 - for large $u$ can make **any** data feasible
 - want $u$ "small"; minimize its sum
@@ -200,6 +192,7 @@ $$
 &u \geq 0
 \end{array}
 $$
+- I'll call it **sparse violation classifier** (SpVC)
 - $\mathbf{1}^T u = \|u\|_1$, since $u \geq 0$; good **heuristic** for separator with few (sparse) violations
 
 ## CVXPY
@@ -224,8 +217,25 @@ Problem(obj, constr).solve()
 - "$+$" class has 3 misclassified points
 - "$-$" class has 2 correctly classified, but inside slab
 
+# Support Vector Classifier
+## Support Vector Classifier
+- idea: combine aspects of last two classifiers
+    - sparse violations of SpVC
+    - robustness of large separating slab in MMC
+- optimize both:
+$$
+\begin{array}{ll}
+\mbox{minimize} & \|a\|_2 + \rho\mathbf{1}^T u \\
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 - u_i \mbox{ for } i = 1, \ldots, N\\
+&u \geq 0
+\end{array}
+$$
+- $\rho > 0$ trades-off between margin $2/\|a\|_2$ and classification violations $\mathbf{1}^T u$
+
+
+# Loss Functions
 ## Hinge Loss
-- in problem, it follows from $y_i\left(a^Tx_i - b\right) \geq 1 - u_i$, $u_i \geq 0$, that
+- in SpVC, it follows from $y_i\left(a^Tx_i - b\right) \geq 1 - u_i$, $u_i \geq 0$, that
 $$
 u_i = \begin{cases}
 0 & y_i\left(a^Tx_i - b\right) \geq 1\\
@@ -242,7 +252,7 @@ $$
 is the **hinge loss** function, equivalently: $\max(0, 1-z)$ or $(1-z)_+$
 
 ## Hinge Loss Problem
-- note that $\ell_h$ is convex, so we can rewrite
+- note that $\ell_h$ is convex, so we can rewrite SpVC
 as the **equivalent problem**
 $$
 \begin{array}{ll}
@@ -261,6 +271,12 @@ $$
     Problem(obj).solve()
     ```
 
+
+## other
+- show indicator function to show same as feasibility problem
+- logistic loss is logistic regression
+- other random loss functions
+- infinity norm of violations for max violation
 
 ## Non-separable Linear Classification
 - relaxed feasibility problem
