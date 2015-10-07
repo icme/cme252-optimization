@@ -2,7 +2,7 @@
 % AJ Friend \
   ICME, Stanford University
 
-# Intro
+# Introduction
 ## Support Vector Machines
 - many related/overlapping names:
     - maximum margin classifier
@@ -153,6 +153,115 @@ Problem(obj, constr).solve()
 \includegraphics[width=0.65\textwidth]{fig/max_margin.pdf}
 
 # Non-separable Linear Classification
+## Non-separable Linear Classification
+- reformulate as hinge loss function
+- show indicator function to show same as feasibility problem
+- logistic loss is logistic regression
+- other random loss functions
+
+"violation of margins/constraints"
+- combine relaxation with width of slab for "support vector classifier"
+
+## Non-separable Linear Classification
+\centering
+\includegraphics[width=0.65\textwidth]{fig/non_separable.pdf}
+
+## Non-separable Linear Classification
+- no separating hyperplane exists
+- try finding linear separator
+```
+obj = Minimize(0)
+constr = [mul_elemwise(y, X*a - b) >= 1]
+prob = Problem(obj, constr)
+prob.solve()
+```
+- results in `prob.status == 'infeasible'`
+
+## Non-separable Linear Classification
+- idea: "relax" constraints to make problem feasible
+- add **slack** variables $u \in \reals^N_+$ to allow data points to be
+on "wrong side" of hyperplane
+$$
+y_i\left(a^Tx_i - b\right) \geq 1 - u_i,\quad u_i \geq 0
+$$
+    + $u_i = 0$: $x_i$ on **right** side of hyperplane
+    + $0 < u_i < 1$: $x_i$ on **right** side, but **inside slab**
+    $\lbrace x \mid -1 \leq a^T x - b \leq +1 \rbrace$
+    + $u_i > 1$: $x_i$ on **wrong** side of hyperplane
+
+## Non-separable Linear Classification
+- $u$ gives measure of how much constraints are violated
+- for large $u$ can make **any** data feasible
+- want $u$ "small"; minimize its sum
+$$
+\begin{array}{ll}
+\mbox{minimize} & \mathbf{1}^T u \\
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 - u_i \mbox{ for } i = 1, \ldots, N\\
+&u \geq 0
+\end{array}
+$$
+- $\mathbf{1}^T u = \|u\|_1$, since $u \geq 0$; good **heuristic** for separator with few (sparse) violations
+
+## CVXPY
+```python
+a = Variable(n)
+b = Variable()
+u = Variable(N)
+
+obj = Minimize(sum_entries(u))
+constr = [mul_elemwise(y, X*a - b) >= 1 - u, u >= 0]
+Problem(obj, constr).solve()
+```
+
+## Example
+\centering
+\includegraphics[width=0.65\textwidth]{fig/sparse.pdf}
+
+## Example
+\centering
+\includegraphics[width=0.5\textwidth]{fig/violations.pdf}
+
+- "$+$" class has 3 misclassified points
+- "$-$" class has 2 correctly classified, but inside slab
+
+## Hinge Loss
+- in problem, it follows from $y_i\left(a^Tx_i - b\right) \geq 1 - u_i$, $u_i \geq 0$, that
+$$
+u_i = \begin{cases}
+0 & y_i\left(a^Tx_i - b\right) \geq 1\\
+1 - y_i\left(a^Tx_i - b\right) & y_i\left(a^Tx_i - b\right) < 1
+\end{cases}
+$$
+- rewrite as $u_i = \ell_h\left[y_i\left(a^Tx_i - b\right)\right]$, where
+$$
+\ell_h(z) = \begin{cases}
+0 & z \geq 1\\
+1 - z & z < 1
+\end{cases}
+$$
+is the **hinge loss** function, equivalently: $\max(0, 1-z)$ or $(1-z)_+$
+
+## Hinge Loss Problem
+- note that $\ell_h$ is convex, so we can rewrite
+as the **equivalent problem**
+$$
+\begin{array}{ll}
+\mbox{minimize} & \sum_{i=1}^N \ell_h\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+- unconstrained (non-differentiable) convex problem
+- in CVXPY:
+
+    ```python
+    def hinge(z):
+        return pos(1-z)
+
+    r = mul_elemwise(y, X*a - b)
+    obj = Minimize(sum_entries(hinge(r)))
+    Problem(obj).solve()
+    ```
+
+
 ## Non-separable Linear Classification
 - relaxed feasibility problem
 - l1 penality to minimize misclassificaiton: pure LP
