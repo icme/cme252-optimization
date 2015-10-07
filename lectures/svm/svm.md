@@ -29,7 +29,7 @@
 \includegraphics[width=0.65\textwidth]{fig/non_lin_sep.pdf}
 
 ## Linearly Separable Problem
-- data: $x_i \in \reals^n$ with labels $y_i \in \lbrace +1, -1 \rbrace$ for $i = 1, \ldots, m$
+- data: $x_i \in \reals^n$ with labels $y_i \in \lbrace +1, -1 \rbrace$ for $i = 1, \ldots, N$
 - assume **strictly** linearly separable
 - find hyperplane $\lbrace x\ \vert\ a^T x = b\rbrace$ that separates points by label
 \begin{align*}
@@ -55,7 +55,7 @@ $$
 $$
 \begin{array}{ll}
 \mbox{minimize} & 0 \\
-\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, m
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, N
 \end{array}
 $$
 with variables $a \in \reals^n$, $b \in \reals$
@@ -110,7 +110,7 @@ is $2/\|a\|_2$ (via linear algebra)
 $$
 \begin{array}{ll}
 \mbox{maximize} & 2/\|a\|_2 \\
-\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, m
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, N
 \end{array}
 $$
 - but not convex!
@@ -124,7 +124,7 @@ gives
 $$
 \begin{array}{ll}
 \mbox{minimize} & \|a\|_2 \\
-\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, m,
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, N,
 \end{array}
 $$
 the **maximum margin classifier** problem
