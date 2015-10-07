@@ -138,7 +138,7 @@ $$
 $$
 the **maximum margin classifier** (MMC) problem
 
-## Maximum Margin Classifier in CVXPY
+## CVXPY
 ```python
 a = Variable(n)
 b = Variable()
@@ -148,9 +148,12 @@ constr = [mul_elemwise(y, X*a - b) >= 1]
 Problem(obj, constr).solve()
 ```
 
-## Maximum Margin Classifier
+## Example
 \centering
-\includegraphics[width=0.65\textwidth]{fig/max_margin.pdf}
+\includegraphics[width=0.5\textwidth]{fig/max_margin.pdf}
+
+- note that max margin depends on only 3 tangent data points, called **support vectors**
+- could throw away remaining data and get same solution
 
 # Non-separable Linear Classification
 ## Non-separable Linear Classification
@@ -208,7 +211,9 @@ Problem(obj, constr).solve()
 
 ## Example
 \centering
-\includegraphics[width=0.65\textwidth]{fig/sparse.pdf}
+\includegraphics[width=0.6\textwidth]{fig/sparse.pdf}
+
+- solution depends only on points inside of, tangent to, or on wrong side of slab
 
 ## Example
 \centering
@@ -230,7 +235,28 @@ $$
 &u \geq 0
 \end{array}
 $$
-- $\rho > 0$ trades-off between margin $2/\|a\|_2$ and classification violations $\mathbf{1}^T u$
+- $\rho > 0$ trades-off between margin $2/\|a\|_2$ and classification violations $\mathbf{1}^T u$ (multi-objective optimization)
+- **support vector classifier** (SVC)
+
+## CVXPY
+```python
+a = Variable(n)
+b = Variable()
+u = Variable(N)
+rho = .1
+
+obj = Minimize(norm(a) + rho*sum_entries(u))
+constr = [mul_elemwise(y, X*a - b) >= 1 - u, u >= 0]
+Problem(obj, constr).solve()
+```
+
+## Example with $\rho = .1$
+\centering
+\includegraphics[width=0.65\textwidth]{fig/svc1.pdf}
+
+## Example with $\rho = 10$
+\centering
+\includegraphics[width=0.65\textwidth]{fig/svc2.pdf}
 
 
 # Loss Functions
@@ -251,7 +277,7 @@ $$
 $$
 is the **hinge loss** function, equivalently: $\max(0, 1-z)$ or $(1-z)_+$
 
-## Hinge Loss Problem
+## Hinge Loss SpVC
 - note that $\ell_h$ is convex, so we can rewrite SpVC
 as the **equivalent problem**
 $$
@@ -271,28 +297,75 @@ $$
     Problem(obj).solve()
     ```
 
+## Hinge Loss SVC
+- can rewrite SVC as the **unconstrained** problem
+$$
+\begin{array}{ll}
+\mbox{minimize} & \|a\|_2 + \rho\sum_{i=1}^N \ell_h\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+- completely **equivalent** to the SVC formulation from before
+- common form for classification problems:
+$$
+\begin{array}{ll}
+\mbox{minimize} & r(a) + \rho \sum_{i=1}^N \ell\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+    - $\ell$ is a **loss function** (fit to data)
+    - $r$ is a **regularizer** (prior on parameters)
+- mix and match regularizers and loss functions for different types of classification
 
-## other
-- show indicator function to show same as feasibility problem
-- logistic loss is logistic regression
-- other random loss functions
-- infinity norm of violations for max violation
+## Logistic Loss
+- **logistic loss** is an alternative to hinge loss:
+$$
+\ell_L(z) = \log(1 + \exp(-z))
+$$
+- convex, but not immediately obvious (2nd derivative test?)
 
-## Non-separable Linear Classification
-- relaxed feasibility problem
-- l1 penality to minimize misclassificaiton: pure LP
-- tradeoff between classification and width of slab: SOCP
+\centering
+\includegraphics[width=0.45\textwidth]{fig/log_hinge.pdf}
 
-## Hinge loss
-- reformulate as hinge loss objective
-- general loss function form... $l(Ax+b)$
+## Logistic Regression
+- get classic **logistic regression** with
+$$
+\begin{array}{ll}
+\mbox{minimize} & r(a) + \rho \sum_{i=1}^N \ell\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+when:
+    - $r(a) \equiv 0$
+    - $\ell(z) = \ell_L(z)$
+- **regularized** logistic regression when $r(a)$ is $\|a\|_2$ or $\|a\|_1$ (sparsity)
 
-## logistic
-- change loss function to get logistic loss
-- other loss functions
+## Other Loss Functions
+- hard loss: $\ell_\mathrm{hard}(z) =
+\begin{cases}
+0 & z \geq 1 \\
++\infty & z < 1 \\
+\end{cases}$
+- exponential loss: $\ell_\mathrm{exp}(z) = \exp(-z)$
+- quadratic loss: $\ell_2(z) = (1-z)_+^2$
+- (nonconvex) 0-1 loss: $\ell_{0-1}(z) = \begin{cases} 0 & z  \geq 1 \\ 1 & z < 1\end{cases}$ 
 
-## regularization
-- regularize to get sparse classifier...
+## Other Loss Functions
+\centering
+\includegraphics[width=0.65\textwidth]{fig/losses.pdf}
+
+## Unified Models
+- linear separator feasibility problem:
+    - $\ell_\mathrm{hard}$, $r \equiv 0$
+- MMC:
+    - $\ell_\mathrm{hard}$, $r(a) = \|a\|_2$
+- SpVC:
+    - $\ell_h$, $r \equiv 0$
+- SVC:
+    - $\ell_h$, $r(a) = \|a\|_2$
+- Logistic regression:
+    - $\ell_L$, $r \equiv 0$
+- many other options for modeling
+    - loss for max violation instead of sum
+    - sparse $a$ for feature selection
+
 
 ## nonlinear discrimination
 - adding features

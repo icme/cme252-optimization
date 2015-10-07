@@ -21,6 +21,13 @@ look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.h
       explaining convex functions, sets, problems in lecture 2
 - with regression, can explain multiobjective problems
 - give examples with convex problem transformations
+- clean up SVM examples so less code is duplicated
+- but each problem into a function of its own: SVM, SpVC, SVC..
+
+# lecture ideas
+- multiclass SVM
+- max flow, multicommodity flow
+- optimal evacuation plan
 
 # homework
 - given list of spheres (point in R^n and radius), find a point in the intersection
