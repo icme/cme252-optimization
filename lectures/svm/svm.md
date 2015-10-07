@@ -2,6 +2,7 @@
 % AJ Friend \
   ICME, Stanford University
 
+# Intro
 ## Support Vector Machines
 - find a hyperplane to separate data points into two classes
 - use hyperplane to classify new (unseen) points
@@ -10,7 +11,7 @@
 \includegraphics[width=0.6\textwidth]{fig/first.pdf}
 
 ## Scenarios
-- assume data falls into one category:
+- assume data falls into one of these categories:
     + strictly linearly separable
     + approximately (not strictly) linearly separable
     + approximately non-linearly separable (hyperplanes won't work)
@@ -42,6 +43,10 @@ a^Tx_i - b \leq -1 \mbox{ if } y_i = -1
 \end{align*}
 
 ## Linearly Separable Problem
+\centering
+\includegraphics[width=0.65\textwidth]{fig/regions.pdf}
+
+## Linearly Separable Problem
 - for all $i$, rewrite constraints as
 $$
 y_i\left(a^Tx_i - b\right) \geq 1
@@ -54,8 +59,19 @@ $$
 \end{array}
 $$
 with variables $a \in \reals^n$, $b \in \reals$
-- has many potential separators
 
+## CVXPY for Separable Problem
+
+```python
+a = Variable(n)
+b = Variable()
+
+obj = Minimize(0)
+constr = [mul_elemwise(y, X*a - b) >= 1]
+Problem(obj, constr).solve()
+```
+
+# Which Separator?
 ## Which Separator?
 \centering
 \includegraphics[width=0.65\textwidth]{fig/which1.pdf}
@@ -72,10 +88,60 @@ with variables $a \in \reals^n$, $b \in \reals$
 \centering
 \includegraphics[width=0.65\textwidth]{fig/which4.pdf}
 
+# Maximum Margin Classifier
+## Maximum Margin Classifier
+- infinitely many choices for separating hyperplane
+- choose one which maximizes **width** of separating **slab**
+$$
+\lbrace x \mid -1 \leq a^T x - b \leq +1 \rbrace
+$$
+- "maximum margin" or "robust linear" classifier
 
-## Separable linear classification/discrimination
-- many hyperplanes
-- maximum margin classifier and robustness
+\centering
+\includegraphics[width=0.45\textwidth]{fig/slab.pdf}
+
+## Maximum Margin Classifier
+- width of separating slab
+$$
+\lbrace x \mid -1 \leq a^T x - b \leq +1 \rbrace
+$$
+is $2/\|a\|_2$ (via linear algebra)
+- suggests optimization problem
+$$
+\begin{array}{ll}
+\mbox{maximize} & 2/\|a\|_2 \\
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, m
+\end{array}
+$$
+- but not convex!
+
+## Maximum Margin Classifier
+- reformulate:
+$$
+\mbox{maximize}\ 2/\|a\|_2 \iff \mbox{minimize}\ \|a\|_2
+$$
+gives
+$$
+\begin{array}{ll}
+\mbox{minimize} & \|a\|_2 \\
+\mbox{subject to} & y_i\left(a^Tx_i - b\right) \geq 1 \mbox{ for } i = 1, \ldots, m,
+\end{array}
+$$
+the **maximum margin classifier** problem
+
+## Maximum Margin Classifier in CVXPY
+```python
+a = Variable(n)
+b = Variable()
+
+obj = Minimize(norm(a))
+constr = [mul_elemwise(y, X*a - b) >= 1]
+Problem(obj, constr).solve()
+```
+
+## Maximum Margin Classifier
+\centering
+\includegraphics[width=0.65\textwidth]{fig/max_margin.pdf}
 
 ## Nonseparable linear classification
 - relaxed feasibility problem
