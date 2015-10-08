@@ -24,6 +24,27 @@ look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.h
 - clean up SVM examples so less code is duplicated
 - but each problem into a function of its own: SVM, SpVC, SVC..
 
+
+## nonlinear discrimination
+- adding features
+- polynomial discrimination any different?
+- rbf kernel? radial basis function
+- kernel methods and relationship with convex opt...
+
+## algorithms
+- note that so far, we have said **nothing** about **how** to compute a supporting vector
+- we have focused on modeling
+- that's OK, we're focusing on modeling
+- algorithms involve duality and optimality conditions
+
+## scikitlearn comparison
+- make sure it matches up with python SVM formulation
+- maybe even do a timing comparison...
+
+## data science perspective
+- cleaning and centering data
+- sparse predictors
+
 # lecture ideas
 - multiclass SVM
 - max flow, multicommodity flow
