@@ -23,6 +23,8 @@ look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.h
 - give examples with convex problem transformations
 - clean up SVM examples so less code is duplicated
 - but each problem into a function of its own: SVM, SpVC, SVC..
+- make it more explicit that convex <= concave gives a convex set
+- add component-wise composition rule to make more interesting examples
 
 
 ## nonlinear discrimination
