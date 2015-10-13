@@ -277,6 +277,14 @@ $$
 $$
 is the **hinge loss** function, equivalently: $\max(0, 1-z)$ or $(1-z)_+$
 
+## Hinge Loss
+- $u_i = \ell_h\left[y_i\left(a^Tx_i - b\right)\right]$
+- no penality if $y_i\left(a^Tx_i - b\right) \geq 1$
+- linear penalty otherwise
+
+\centering
+\includegraphics[width=0.5\textwidth]{fig/hinge_loss.pdf}
+
 ## Hinge Loss SpVC
 - note that $\ell_h$ is convex, so we can rewrite SpVC
 as the **equivalent problem**
@@ -297,6 +305,22 @@ $$
     Problem(obj).solve()
     ```
 
+## Why Hinge Loss?
+- "0-1" loss: $\ell_{0-1}(z) = \begin{cases} 0 & z  \geq 1 \\ 1 & z < 1\end{cases}$
+- can't solve nonconvex, combinatorial problem to minimize (discrete) number of violations with
+$$
+\begin{array}{ll}
+\mbox{minimize} & \sum_{i=1}^N \ell_{0-1}\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+- hinge loss gives a **convex** approximation to 0-1 loss
+
+## Why Hinge Loss?
+\centering
+\includegraphics[width=0.55\textwidth]{fig/hinge_01.pdf}
+
+- but not the **only** convex approximation
+
 ## Hinge Loss SVC
 - can rewrite SVC as the **unconstrained** problem
 $$
@@ -313,14 +337,14 @@ $$
 $$
     - $\ell$ is a **loss function** (fit to data)
     - $r$ is a **regularizer** (prior on parameters)
-- mix and match regularizers and loss functions for different types of classification
+- **mix and match** regularizers and loss functions for different types of classification
 
 ## Logistic Loss
 - **logistic loss** is an alternative to hinge loss:
 $$
 \ell_L(z) = \log(1 + \exp(-z))
 $$
-- convex, but not immediately obvious (2nd derivative test?)
+- convex, but not immediately obvious (2nd derivative test)
 
 \centering
 \includegraphics[width=0.45\textwidth]{fig/log_hinge.pdf}
@@ -335,9 +359,47 @@ $$
 when:
     - $r(a) \equiv 0$
     - $\ell(z) = \ell_L(z)$
+- nice probabilistic interpretation
 - **regularized** logistic regression when $r(a)$ is $\|a\|_2$ or $\|a\|_1$ (sparsity)
 
+## Logistic Loss in CVXPY
+- $\ell_L(z) = \log(1 + \exp(-z))$ doesn't follow convex composition rules
+- to represent in CVXPY, use existing convex atom **log-sum-exp**:
+$$
+f(x) = \log\left(e^{x_1} + \cdots + e^{x_n} \right)
+$$
+- convexity follows from Hessian argument
+- $$\ell_L(z) = \log(1 + \exp(-z)) =  \log\left(e^{0} + e^{-z} \right)$$
+
+```python
+def logistic(x):
+    elems = []
+    for xi in x:
+        elems += [cvx.log_sum_exp(cvx.vstack(0, xi))]
+    
+    return cvx.vstack(*elems)
+```
+
+## Logistic Regression in CVXPY
+```python
+a = Variable(n)
+b = Variable()
+
+r = mul_elemwise(y, X*a - b)
+obj = Minimize(sum_entries(logistic(r)))
+Problem(obj).solve()
+```
+
+## Logistic Regression in CVXPY
+\centering
+\includegraphics[width=0.65\textwidth]{fig/logistic_reg.pdf}
+
+## SpVC (for comparison)
+\centering
+\includegraphics[width=0.65\textwidth]{fig/sparse.pdf}
+
 ## Other Loss Functions
+- many loss functions are available to modeler
 - hard loss: $\ell_\mathrm{hard}(z) =
 \begin{cases}
 0 & z \geq 1 \\
@@ -345,23 +407,94 @@ when:
 \end{cases}$
 - exponential loss: $\ell_\mathrm{exp}(z) = \exp(-z)$
 - quadratic loss: $\ell_2(z) = (1-z)_+^2$
-- (nonconvex) 0-1 loss: $\ell_{0-1}(z) = \begin{cases} 0 & z  \geq 1 \\ 1 & z < 1\end{cases}$ 
 
 ## Other Loss Functions
 \centering
 \includegraphics[width=0.65\textwidth]{fig/losses.pdf}
 
 ## Unified Models
-- linear separator feasibility problem:
-    - $\ell_\mathrm{hard}$, $r \equiv 0$
-- MMC:
-    - $\ell_\mathrm{hard}$, $r(a) = \|a\|_2$
-- SpVC:
-    - $\ell_h$, $r \equiv 0$
-- SVC:
-    - $\ell_h$, $r(a) = \|a\|_2$
-- Logistic regression:
-    - $\ell_L$, $r \equiv 0$
+- many classification models fall into the form
+$$
+\begin{array}{ll}
+\mbox{minimize} & r(a) + \rho \sum_{i=1}^N \ell\left[y_i\left(a^Tx_i - b\right) \right]
+\end{array}
+$$
+- unified way to think about many of these models
+
+## Unified Models
+- linear separator feasibility problem: $\ell_\mathrm{hard}$, $r \equiv 0$
+- MMC: $\ell_\mathrm{hard}$, $r(a) = \|a\|_2$
+- SpVC: $\ell_h$, $r \equiv 0$
+- SVC: $\ell_h$, $r(a) = \|a\|_2$
+- Logistic regression: $\ell_L$, $r \equiv 0$
+- "boosting": $\ell_{\mathrm{exp}}$, $r \equiv 0$
 - many other options for modeling
     - loss for max violation instead of sum
     - sparse $a$ for feature selection
+    - one-sided Huber loss for outliers?
+
+# Nonlinear Separators
+## Nonlinear Separators
+\centering
+\includegraphics[width=0.65\textwidth]{fig/non_lin_sep.pdf}
+
+## Nonlinear Separators
+- don't expect a linear separator to work
+- to get nonlinear separators, we need to generalize our classification
+function
+$$
+f(x) = a^T x + b
+$$
+- consider polynomials of $x \in \mathbf{R}^n$ of degree $d$:
+$$
+f(x) = \sum_{j_1 + \cdots + j_n \leq d} a_{j_1 \cdots j_n} x_1^{j_1} \cdots x_n^{j_n}
+$$
+- a little messy, but **still linear** in decision variable $a$
+
+## Support Vector Machines
+- follow the same setup as before: data $x_i$ with labels $y_i \in \lbrace +1,-1 \rbrace$
+- positive and negative examples on opposite "sides" of the classification function
+\begin{align*}
+f_a(x_i) > 0 \mbox{ if } y_i = +1\\
+f_a(x_i) < 0 \mbox{ if } y_i = -1
+\end{align*}
+which we simplify to
+$$
+y_if_a(x_i) > 0 
+$$
+
+## Support Vector Machines
+- **quantify** our dislike of violations with **any** loss function we like
+$$
+\ell\left[y_i f_a(x_i)\right]
+$$
+- add regularization to get the same general set up as before:
+$$
+\begin{array}{ll}
+\mbox{minimize}_a & r(a) + \rho \sum_{i=1}^N \ell\left[y_i f_a(x) \right]
+\end{array}
+$$
+- not really different from linear classification problem before
+- we've just expanded the number of **features** for each point by considering
+polynomials
+- **support vector machine** is usually $\ell_h$, $r(a) = \|a\|_2$
+
+# Multiclass SVM
+## Multiclass SVM
+- what if you have more than 2 labels?
+- example: handwritten digit classification
+
+\centering
+\includegraphics[width=0.55\textwidth]{fig/mnistExamples.png}
+
+## Multiclass SVM Approaches
+- one-vs-one
+    - for each pair of classes, train an SVM
+    - $\frac{K(K-1)}{2}$ problems!
+    - for a new observation, choose most frequently predicted label among all SVMs
+- one-vs-all
+    - train $K$ SVMs: one single class vs. all others grouped
+    - for new observation, choose label furthest away from separating hyperplane
+
+## Single-model Multiclass SVM
+- TODO
