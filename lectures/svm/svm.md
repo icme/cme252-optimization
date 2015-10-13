@@ -306,7 +306,7 @@ $$
     ```
 
 ## Why Hinge Loss?
-- "0-1" loss: $\ell_{0-1}(z) = \begin{cases} 0 & z  \geq 1 \\ 1 & z < 1\end{cases}$
+- "0-1" loss: $\ell_{0-1}(z) = \begin{cases} 0 & z  \geq 0 \\ 1 & z < 0\end{cases}$
 - can't solve nonconvex, combinatorial problem to minimize (discrete) number of violations with
 $$
 \begin{array}{ll}
@@ -402,8 +402,8 @@ Problem(obj).solve()
 - many loss functions are available to modeler
 - hard loss: $\ell_\mathrm{hard}(z) =
 \begin{cases}
-0 & z \geq 1 \\
-+\infty & z < 1 \\
+0 & z \geq 0 \\
++\infty & z < 0 \\
 \end{cases}$
 - exponential loss: $\ell_\mathrm{exp}(z) = \exp(-z)$
 - quadratic loss: $\ell_2(z) = (1-z)_+^2$
