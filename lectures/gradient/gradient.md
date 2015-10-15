@@ -268,7 +268,7 @@ if you know $M$:
     - re-estimate $M$ as $\|\nabla f(x^{k+1}) - \nabla f(x^k) \|/\|x^{k+1} - x^k\|$
 - many other line search options
 
-## curvature
+<!-- ## curvature
 - strongly convex means minimum eigenvalue
 - lipschits continuous means max eigenvalue of hessian
 
@@ -297,4 +297,4 @@ if you know $M$:
 
 
 ## Problems with Constraints
-- simple barrier methods
+- simple barrier methods -->
