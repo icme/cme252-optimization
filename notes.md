@@ -64,3 +64,22 @@ look up "metadata blocks" in <http://pandoc.org/demo/example9/pandocs-markdown.h
 - list of foods with nutrients
 - min and max healthy range for each nutrient
 - find a healthy diet
+
+# Sun Oct 18 23:26:44 2015
+- NMF
+- min max rps
+- max flow
+- portfolio opt
+- opt parade route
+- evacuation
+- structural opt
+- rockets/trajectories
+- control
+- model predictive control
+
+rps
+max flow
+parade route
+opt evac
+nmf
+portfolio
