@@ -460,7 +460,7 @@ f_a(x_i) < 0 \mbox{ if } y_i = -1
 \end{align*}
 which we simplify to
 $$
-y_if_a(x_i) > 0 
+y_i f_a(x_i) > 0 
 $$
 
 ## Support Vector Machines
