@@ -1,9 +1,8 @@
 ---
 title: Next Steps in Mathematical Optimization
 author: |
-  | Nick Henderson, AJ Friend
+  | AJ Friend
   | Stanford University
-date: August 21, 2015
 ---
 
 ## Linear algebra
@@ -35,7 +34,11 @@ date: August 21, 2015
 - CME304: Numerical Optimization
     - <http://web.stanford.edu/class/cme304/>
 
-## The world of optimization (see: http://neos-guide.org/)
-
-\centering
-\includegraphics[width=\textwidth]{fig/opt-tax.png}
+## Topics
+- Optimization duality
+- Semidefinite programming and more sophisticated convex modeling
+- (Accelerated) first-order methods for scale and speed (compressed sensing)
+- Interior Point Methods
+- Distributed Optimization
+- Stochastic Optimization
+- Convex techniques for nonconvex problems
